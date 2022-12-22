@@ -7,6 +7,9 @@ let outputEl = document.getElementById("output");
 
 // Global Variables
 let output = [];
+output.push(returnObject("a", "a", "a", "a"));
+output.push(returnObject("b", "b", "b", "b"));
+output.push(returnObject("c", "c", "c", "c"));
 
 // Go Btn - Menu Listener
 goBtnEl.addEventListener("click", goBtnHandler);
@@ -36,7 +39,7 @@ function displayContacts() {
   // Add each contact to the output
   for (let i = 0; i < output.length; i++) {
     let divEl = document.createElement("div");
-    divEl.innerHTML = output[i].name;
+    divEl.innerHTML = `${i}. Name: ${output[i].name} | Email: ${output[i].email} | Phone Number: ${output[i].phoneNum} | Country: ${output[i].country}`;
     outputEl.appendChild(divEl);
   }
 }
@@ -45,29 +48,56 @@ function addContact() {
   let name = prompt("Enter name:");
   let email = prompt("Enter email:");
   let phoneNum = prompt("Enter phone number:");
+  let country = prompt("Enter a country");
 
-  output.push(returnObject(name, email, phoneNum));
+  output.push(returnObject(name, email, phoneNum, country));
+  displayContacts();
 }
 
 function removeContact() {
-  console.log("Remove Contact");
+  let index = +prompt("Enter index of contact to remove: ");
+  output.splice(index, 1);
+  displayContacts();
 }
 
 function displayByName() {
-  console.log("Display by Name");
+  let inputName = prompt("Enter name of contact");
+
+  outputEl.innerHTML = ""; // Clear the output
+  for (i = 0; i < output.length; i++) {
+    if (output[i].name.includes(inputName)) {
+      // output[i] is an object, output[i].name is the name as a string of the current object
+      let divEl = document.createElement("div");
+      divEl.innerHTML = `${i}. Name: ${output[i].name} | Email: ${output[i].email} | Phone Number: ${output[i].phoneNum} | Country: ${output[i].country}`;
+      outputEl.appendChild(divEl);
+    }
+  }
 }
 
 function displayByCountry() {
-  console.log("Display by Country");
-}
+  let inputCountry = prompt("Enter name of country");
 
-// Helper
-// new name
+  outputEl.innerHTML = "";
+  if (output[i].country.includes(inputCountry)) {
+    let divEl = document.createElement("div");
+    divEl.innerHTML = `${i}. Name: ${output[i].name} | Email: ${output[i].email} | Phone Number: ${output[i].phoneNum} | Country: ${output[i].country}`;
+    outputEl.appendChild(divEl);
+  }
 
-function returnObject(nameParameter, emailParameter, phoneNumParameter) {
-  return {
-    name: nameParameter,
-    email: emailParameter,
-    phoneNum: phoneNumParameter,
-  };
+  // Helper
+  // new name
+
+  function returnObject(
+    nameParameter,
+    emailParameter,
+    phoneNumParameter,
+    countryParameter
+  ) {
+    return {
+      name: nameParameter,
+      email: emailParameter,
+      phoneNum: phoneNumParameter,
+      country: countryParameter,
+    };
+  }
 }
