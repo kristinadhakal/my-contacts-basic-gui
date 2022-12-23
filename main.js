@@ -6,10 +6,8 @@ let menuEl = document.getElementById("menu");
 let outputEl = document.getElementById("output");
 
 // Global Variables
-let output = [];
-output.push(returnObject("a", "a", "a", "a"));
-output.push(returnObject("b", "b", "b", "b"));
-output.push(returnObject("c", "c", "c", "c"));
+let output = initContact();
+displayContacts();
 
 // Go Btn - Menu Listener
 goBtnEl.addEventListener("click", goBtnHandler);
@@ -51,12 +49,14 @@ function addContact() {
   let country = prompt("Enter a country");
 
   output.push(returnObject(name, email, phoneNum, country));
+  saveContact();
   displayContacts();
 }
 
 function removeContact() {
   let index = +prompt("Enter index of contact to remove: ");
   output.splice(index, 1);
+  saveContact();
   displayContacts();
 }
 
@@ -78,26 +78,37 @@ function displayByCountry() {
   let inputCountry = prompt("Enter name of country");
 
   outputEl.innerHTML = "";
-  if (output[i].country.includes(inputCountry)) {
-    let divEl = document.createElement("div");
-    divEl.innerHTML = `${i}. Name: ${output[i].name} | Email: ${output[i].email} | Phone Number: ${output[i].phoneNum} | Country: ${output[i].country}`;
-    outputEl.appendChild(divEl);
+  for (i = 0; i < output.length; i++) {
+    if (output[i].country.includes(inputCountry)) {
+      let divEl = document.createElement("div");
+      divEl.innerHTML = `${i}. Name: ${output[i].name} | Email: ${output[i].email} | Phone Number: ${output[i].phoneNum} | Country: ${output[i].country}`;
+      outputEl.appendChild(divEl);
+    }
   }
+}
 
-  // Helper
-  // new name
+// Helper
+// new name
 
-  function returnObject(
-    nameParameter,
-    emailParameter,
-    phoneNumParameter,
-    countryParameter
-  ) {
-    return {
-      name: nameParameter,
-      email: emailParameter,
-      phoneNum: phoneNumParameter,
-      country: countryParameter,
-    };
-  }
+function returnObject(
+  nameParameter,
+  emailParameter,
+  phoneNumParameter,
+  countryParameter
+) {
+  return {
+    name: nameParameter,
+    email: emailParameter,
+    phoneNum: phoneNumParameter,
+    country: countryParameter,
+  };
+}
+
+function initContact() {
+  let jsonContact = localStorage.getItem("output");
+  return JSON.parse(jsonContact) ?? [];
+}
+
+function saveContact() {
+  localStorage.setItem("output", JSON.stringify(output));
 }
